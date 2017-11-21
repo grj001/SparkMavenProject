@@ -10,7 +10,7 @@ object WordCount {
     // Master 指定运行平台, yarn , standalong, mesos, local
     // local local[N] local[*]
     val conf =
-      new SparkConf()
+      new SparkConf(false)
         .setMaster("local[2]")
         .setAppName("wordCount")
     //构建SparkContext对象
