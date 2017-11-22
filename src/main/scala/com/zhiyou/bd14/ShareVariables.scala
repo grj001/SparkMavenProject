@@ -86,11 +86,14 @@ object ShareVariables {
         case 1 => oddNum.add(1)
         case _ =>
       }
+      (x,1)
     })
 
-    result.foreach(x => {
+    val resultEvenNum = result.filter(x => x._1%2==0)
 
-    })
+
+
+    resultEvenNum.foreach(println)
 
     println(s"总记录数为:${allNum.value}" +
       s", 偶数的记录数为: ${evenNum.value}, 占比:${}" +
