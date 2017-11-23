@@ -1,5 +1,7 @@
 package com.zhiyou.bd14
 
+import java.text.DecimalFormat
+
 import org.apache.spark.{SparkConf, SparkContext}
 
 object ShareVariables {
@@ -95,9 +97,13 @@ object ShareVariables {
 
     resultEvenNum.foreach(println)
 
+
+    val df = new DecimalFormat("0.00")
+
+
     println(s"总记录数为:${allNum.value}" +
-      s", 偶数的记录数为: ${evenNum.value}, 占比:${}" +
-      s", 奇数的记录数为${oddNum.value}, 占比${}")
+      s", 偶数的记录数为: ${evenNum.value}, 占比:${df.format((evenNum.value.toFloat*100/allNum.value.toFloat))}%" +
+      s", 奇数的记录数为${oddNum.value}, 占比${df.format((oddNum.value.toFloat*100/allNum.value.toFloat))}%")
 
   }
 

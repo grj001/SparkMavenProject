@@ -31,11 +31,42 @@ object MysqlTest {
     mysqlRDD.foreach(x => {
       println(s"id:${x.getInt("id")}, name:${x.getString("name")}")
     })
+
+  }
+
+
+  //写入mysql
+  def writeToMysql() = {
+    //统计每个用户在每个ip上的行为次数, 结果存放到mysql表user_ip_times
+    val sql = ""
+    val rdd = sc.textFile("/user/user-logs-large.txt")
+    val result = rdd.map(x => {
+      val info = x.split("\\t")
+      ((info(0), info(2)), 1)
+    }).reduceByKey(_ + _)
+
+    //把rdd的数据存放到mysql上
+    result.foreachPartition(x => {
+      //批量写入
+      val connection = getMysqlConnection()
+      val sql = "insert into user_ip_times (userName, ip, times) values (?,?,?)"
+      val preparedStatement = connection.prepareStatement(sql)
+      x.foreach(record => {
+        //写入
+        preparedStatement.setString(1, record._1._1)
+        preparedStatement.setString(2, record._1._2)
+        preparedStatement.setInt(3, record._2)
+        preparedStatement.addBatch()
+      })
+      preparedStatement.executeBatch()
+      connection.close()
+    })
   }
 
 
   def main(args: Array[String]): Unit = {
-    readFromMysql()
+//    readFromMysql()
+    writeToMysql()
   }
 
 
