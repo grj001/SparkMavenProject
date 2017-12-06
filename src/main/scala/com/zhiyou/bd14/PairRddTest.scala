@@ -223,21 +223,22 @@ object PairRddTest {
     val rdd1 = sc.parallelize(list1)
     val rdd2 = sc.parallelize(list2)
 
-    //内关联
-    val innerJoinResult = rdd1.join(rdd2)
-    innerJoinResult.foreach(x => {
-      println(s"姓名:${x._1}, 性别: ${x._2._1}, 年龄: ${x._2._2}")
-    })
-
-//    //左外关联
-//    val leftJoinResult = rdd1.leftOuterJoin(rdd2)
-//    leftJoinResult.foreach(x => {
-//      val age = x._2._2 match {
-//        case None=>"不详"
-//        case Some(a) => a
-//      }
-//      println(s"姓名: ${x._1}, 性别: ${x._2._1}, 年龄: ${age}")
+//    //内关联
+//    val innerJoinResult = rdd1.join(rdd2)
+//    innerJoinResult.foreach(x => {
+//      println(s"姓名:${x._1}, 性别: ${x._2._1}, 年龄: ${x._2._2}")
 //    })
+
+    //左外关联
+    val leftJoinResult = rdd1.leftOuterJoin(rdd2)
+    leftJoinResult.foreach(x => {
+      val age = x._2._2 match {
+        case None=>"不详"
+        case Some(a) => a
+      }
+      println(x)
+      println(s"姓名: ${x._1}, 性别: ${x._2._1}, 年龄: ${age}")
+    })
 
     //右外关联
 //    val rightJoinResult = rdd1.rightOuterJoin(rdd2)
@@ -249,19 +250,19 @@ object PairRddTest {
 //      println(s"姓名: ${x._1}, 性别:${gender}, 年龄: ${x._2._2}")
 //    })
 
-    //全外连接
-    val fullOutterJoinResult = rdd1.fullOuterJoin(rdd2)
-    fullOutterJoinResult.foreach(x => {
-      val gender = x._2._1 match {
-        case None => "-"
-        case Some(a) => a
-      }
-      val age =  x._2._2 match {
-        case None => "-"
-        case Some(a) => a
-      }
-      println(s"姓名:${x._1}, 性别:${gender}, 年龄:${age}")
-    })
+//    //全外连接
+//    val fullOutterJoinResult = rdd1.fullOuterJoin(rdd2)
+//    fullOutterJoinResult.foreach(x => {
+//      val gender = x._2._1 match {
+//        case None => "-"
+//        case Some(a) => a
+//      }
+//      val age =  x._2._2 match {
+//        case None => "-"
+//        case Some(a) => a
+//      }
+//      println(s"姓名:${x._1}, 性别:${gender}, 年龄:${age}")
+//    })
 
   }
 
@@ -306,9 +307,9 @@ object PairRddTest {
 //    combineByKeyTest()
 //    cogroupTest()
 //    subtractTest()
+    joinTest()
 //    joinTest()
-//    joinTest()
-    saveFile()
+//    saveFile()
 
 
 
